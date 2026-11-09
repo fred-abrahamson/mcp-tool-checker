@@ -1,0 +1,30 @@
+{
+  "pricesCheckedOn": "2026-11-04",
+  "maxOutputTokens": 16000,
+  "models": [
+    {
+      "id": "claude-haiku-5-5",
+      "vendor": "anthropic",
+      "size": "small",
+      "price": { "input": 0.1, "cachedInput": 0.01, "cacheWrite": 0.125, "output": 0.5 }
+    },
+    {
+      "id": "claude-opus-5-5",
+      "vendor": "anthropic",
+      "size": "large",
+      "price": { "input": 4, "cachedInput": 0.2, "cacheWrite": 5, "output": 20 }
+    },
+    {
+      "id": "gpt-6-luna",
+      "vendor": "openai",
+      "size": "small",
+      "price": { "input": 0.1, "cachedInput": 0.01, "output": 0.5 }
+    },
+    {
+      "id": "gpt-6.1-sol",
+      "vendor": "openai",
+      "size": "large",
+      "price": { "input": 2, "cachedInput": 0.1, "output": 10 }
+    }
+  ]
+}

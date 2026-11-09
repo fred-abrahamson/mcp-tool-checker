@@ -1,0 +1,190 @@
+{
+  "label": "after",
+  "source": "example: the made-up notebook server, after its description rewrite",
+  "takenAt": "2026-11-09T00:00:00.000Z",
+  "server": {
+    "name": "notebook",
+    "version": "1.0.0"
+  },
+  "instructions": "Notebook holds the user's personal notes. Find a note with search_notes when the user remembers its content, or list_notes when they name a folder or tag; read it with get_note. Ids come from those results, never guessed.",
+  "tools": [
+    {
+      "name": "list_notes",
+      "description": "Lists notes by where they are filed: a folder, a tag, or the newest overall. Returns titles and ids, not bodies.\n\nWhen NOT to call: looking for words or a topic inside notes (search_notes); an id in hand (get_note).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "folder": {
+            "type": "string",
+            "description": "Only notes in this folder, by its exact name."
+          },
+          "tag": {
+            "type": "string",
+            "description": "Only notes carrying this tag."
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "description": "At most this many notes; default 20."
+          }
+        },
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "name": "search_notes",
+      "description": "Finds notes whose title or body contains the given words. Use it when the user remembers what a note said or was about, not where it is filed. Returns titles, ids and a matching snippet.\n\nWhen NOT to call: a folder or tag named exactly (list_notes); an id in hand (get_note).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Words to look for in titles and bodies."
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 50,
+            "description": "At most this many results; default 10."
+          }
+        },
+        "required": [
+          "query"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "name": "get_note",
+      "description": "Reads one note in full, by id: title, body, folder and tags.\n\nWhen NOT to call: no id yet (search_notes or list_notes first).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The note's id, from list_notes or search_notes."
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": true,
+        "destructiveHint": false
+      }
+    },
+    {
+      "name": "create_note",
+      "description": "Creates a new note. Use only for a note that does not exist yet.\n\nWhen NOT to call: changing, retagging or appending to an existing note (update_note).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "description": "The note's title."
+          },
+          "body": {
+            "type": "string",
+            "description": "The note's text, in Markdown."
+          },
+          "folder": {
+            "type": "string",
+            "description": "The folder to put it in; omitted means the inbox."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Tags to attach."
+          }
+        },
+        "required": [
+          "title",
+          "body"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false
+      }
+    },
+    {
+      "name": "update_note",
+      "description": "Changes an existing note by id: its title, its body, or its tags. Fields left out are kept. tags replaces the whole list, so include the existing tags you want to keep.\n\nWhen NOT to call: a new note (create_note).",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The note's id, from list_notes or search_notes."
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "description": "A new title; omitted keeps the old one."
+          },
+          "body": {
+            "type": "string",
+            "description": "A new body, replacing the old one; omitted keeps it."
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The full new tag list, replacing the old one; omitted keeps it."
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": false
+      }
+    },
+    {
+      "name": "delete_note",
+      "description": "Deletes one note by id, permanently. Only when the user asks for it to be deleted.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The note's id, from list_notes or search_notes."
+          }
+        },
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false
+      },
+      "annotations": {
+        "readOnlyHint": false,
+        "destructiveHint": true
+      }
+    }
+  ]
+}

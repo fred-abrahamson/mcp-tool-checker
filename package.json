@@ -1,0 +1,39 @@
+{
+  "name": "mcp-tool-checker",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Scores how often models pick the right MCP tool, with the right arguments, from the tool descriptions alone. Compare two versions of a server before the new text ships.",
+  "license": "MIT",
+  "author": "Fred Abrahamson",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "tool-descriptions",
+    "evals",
+    "llm",
+    "tool-calling"
+  ],
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "snapshot": "node --env-file-if-exists=.env src/snapshot.ts",
+    "check": "node --env-file-if-exists=.env src/check.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "1.5.0",
+    "@modelcontextprotocol/sdk": "1.32.2",
+    "ajv": "8.20.0",
+    "ajv-formats": "3.0.1",
+    "openai": "7.50.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/node": "24.19.2",
+    "typescript": "7.0.2",
+    "vitest": "5.1.0"
+  }
+}
